@@ -26,15 +26,22 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
        
-    - name : Install applications
+    - name : Install dependencies
       run: |
         cd client
+        npm install
+        cd ../server
         npm install
        
     - name : Build client
       run: |
         cd client
         npm run build
+
+    - name : Build server
+      run: |
+         cd server
+         npm run build
         
     - name : scp Client APP
       uses: c0c1/scp-action@v1.0
@@ -51,7 +58,20 @@ jobs:
           # Private key
         key: ${{ secrets.SERVER_SSH_KEY }}
 
-  
+    - name : scp Server APP
+      uses: c0c1/scp-action@v1.0
+      with:
+        # Source dir to deploy
+        src: "server/dist"
+          # SSH address
+        host: ${{ secrets.SERVER_HOST }}
+          # Remote dir path
+        remote: "/root"
+          # SSH Port
+          # SSH User name
+        user: ${{ secrets.SERVER_USERNAME }}
+          # Private key
+        key: ${{ secrets.SERVER_SSH_KEY }}
              
     - name : ssh pipelines
       uses: cross-the-world/ssh-pipeline@master
@@ -64,4 +84,5 @@ jobs:
         port: ${{ secrets.SERVER_PORT }}
         connect_timeout: 10s
         script: |
+          pm2 restart main
           service caddy restart

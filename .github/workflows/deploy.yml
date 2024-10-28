@@ -38,10 +38,10 @@ jobs:
         cd client
         npm run build
 
-    - name : Build server
-      run: |
-         cd server
-         npm run build
+    # - name : Build server
+    #   run: |
+    #      cd server
+    #      npm run build
         
     - name : scp Client APP
       uses: c0c1/scp-action@v1.0
@@ -84,5 +84,8 @@ jobs:
         port: ${{ secrets.SERVER_PORT }}
         connect_timeout: 10s
         script: |
+          cd server
+          npm install
+          npm build
           pm2 restart main
           service caddy restart

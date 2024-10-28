@@ -86,6 +86,6 @@ jobs:
         script: |
           cd server
           npm install
-          npm build
+          npm run build
           pm2 restart main
           service caddy restart

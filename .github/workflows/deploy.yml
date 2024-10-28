@@ -62,7 +62,7 @@ jobs:
       uses: c0c1/scp-action@v1.0
       with:
         # Source dir to deploy
-        src: "server/dist"
+        src: "server"
           # SSH address
         host: ${{ secrets.SERVER_HOST }}
           # Remote dir path
